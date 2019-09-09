@@ -1,0 +1,12 @@
+# git global ignore files
+
+# ignore editor backup files
+*~
+*.swp
+*.swo
+*.bak
+.~lock*
+
+# ignore npm modules directory
+/node_modules
+

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>Basic: Meek's Method STV Tabulation</title>
+<link rel='stylesheet' type='text/css' href='dist/basic.css'>
+<script src='dist/libs/jquery.min.js'></script>
+</head>
+<body>
+<h1>Basic: Meek's Method STV Tabulation</h1>
+<p>Per 
+  <a href="https://prfound.org/resources/reference/reference-meek-rule/"
+        target='_blank' rel='noopener noreferrer'>
+    the reference rule
+  </a>
+  by the Proportional Representation Foundation, with extensions.
+</p>
+<main>
+<h2>Input:</h2>
+<section id='input-group'>
+  <div id='input-text'>
+    <textarea id='input-textarea' rows='20' cols='75'></textArea>
+  </div>
+</section>
+<section id='actions'>
+  <button id='tabulate-button'>Tabulate</button>
+  <button id='sample-input-button'>Show Sample Input</button>
+  <button id='input-help-button'>Help</button>
+<h2>Results:</h2>
+<section id='results-group'>
+  <div id='result-message-box'>
+    <div id='result-progress'></div>
+    <div id='result-message' class='result-text'>z</div>
+  </div>
+  <label for='elected'>Elected:</label>
+  <div id='elected' class='result-text'>|A|B|C</div>
+  <label for='status'>Status:</label>
+  <div id='status' class='result-text'>x</div>
+  <label for='tally'>Tally:</label>
+  <div id='tally' class='result-text'>y</div>
+</section>
+  <div id=input-help class='hidden'>
+    <h3>Help Topics</h3>
+    <div id='input-help-text'>
+    <p>
+      Fill in the data for your election following the patterns of the sample
+      input. The input uses the 
+      <a href="https://en.wikipedia.org/wiki/JSON#Data_types_and_syntax">
+        JSON format
+      </a>.
+      Then click on / tap the "Tabulate" button to get results.
+    </p>
+
+    <h4>Shortcut for an array of strings</h4>
+    <p>
+      A common construct used in the input is a JSON array of strings.
+      A JSON array encloses its items with square brackets, and individual items
+      are separated by commas and optional white space (spaces, tabs, newlines,
+      etc.).
+      Strings are enclosed with double quotes. An example of an array with 5
+      strings is:
+    </p>
+    <ul>
+      <li>["A", "B", "", "C", "D"]</li>
+    </ul>
+    <p>
+      However that can involve typing a lot of punctuation, and arrays of
+      strings are used quite a lot.
+      So the input also accepts a shortcut, called a delimiter-first string.
+      The string values are all put in a single string and are separated by a
+      delimiter-character that is whatever the first character of the string is.
+      So the following delimiter-first strings are equivalent to and will be
+      converted to the above array of strings:
+    </p>
+    <ul class='mono'>
+      <li>" A B  C D"</li>
+      <li>",A,B,,C,D"</li>
+      <li>"|A|B||C|D"</li>
+      <li>"+A+B++C+D"</li>
+    </ul>
+    <p>
+      The delimiter can be any character, but using a punctuation character
+      is recommended.
+      Using this shortcut, the empty string, "", indicates an empty array of
+      strings, [ ].
+    </p><p>
+      This shortcut can be used to specify an array of strings for the
+      "candidates", "tieBreaker", "excluded", and "protected" items,
+      for the rankings of a ballot,
+      and for specifying round-by-round values for the
+      "alternative_defeats" options sub-item.
+    </p>
+
+    <h4>nbrSeatsToFill</h4>
+    <p>
+      The "nbrSeatsToFill" item indicates the number of winners that will be
+      elected by the tabulation, unless there are fewer candidates which are
+      not excluded.
+    </p>
+
+    <h4>candidates</h4>
+    <p>
+      The "candidates" item lists the ranking codes for each candidate.
+      The list can be given as an array of strings or as a delimiter-first
+      string.
+    </p>
+
+    <p>
+      Ranking codes identify candidates and are typically shortened or
+      abbreviated candidate names so that they are more easily used specify how
+      candidates are ranked on ballots.
+      No ranking code can begin with ":" or be equal to "#" or "".
+    </p><p>
+      The ranking codes should not include spaces, other white-space
+      characters, or any of the following characters:
+        '[:"]' (not including the enclosing single quotes).
+      It is recommended that any punctuation in ranking codes be limited to
+      hyphens, underscores, and periods and that the first character be an
+      alphabetic letter.
+      It can be helpful if the the ranking codes are all the same length.
+    </p><p>
+      For example, a candidate named Thomas Jefferson might be given a
+      ranking code of "TJ", "TJ1", "TJeff", "ThJe", "ThomJ", or "ThomJeff".
+      The order in which candidates are listed does not matter.
+    </p>
+
+    <h4>tieBreaker</h4>
+    <p>
+      The "tieBreaker" item is a list of candidates used to break ties for
+      being defeated.
+      Candidates are typically listed in a random order.
+      The list of candidates can be given as an array of strings or as a
+      delimiter-first string.
+    </p><p>
+      Among tied candidates, the candidate listed first in "tieBreaker" will be
+      defeated.
+      It is a tabulation error if a candidate is involved in a tie to be
+      defeated but is not listed in the tieBreaker.
+    </p>
+
+    <h4>maxRankingLevels</h4>
+    <p>
+      The "maxRankingLevels" item indicates how many candidates a voter is
+      allowed to rank.
+      The number specified must be at least 3. A null value, the letters "null"
+      without the quote marks, can be specified to indicate that there was no
+      limit on how many candidates a voter could rank.
+    </p><p>
+      This item is used to determine whether exhausted votes are reported as
+      abstentions.
+      If a ballot is exhausted and the voter had the opportunity to rank
+      additional candidates, but didn't, any portion of that ballot's vote
+      which is not counting for a candidate is reported in the ":Abstentions"
+      category.
+    </p>
+
+    <h4>excluded and protected candidates</h4>
+    <p>
+      The "excluded" item identifies candidates which are excluded (a.k.a.
+      withdrawn) from the tabulation and are considered defeated before the
+      first round of tabulation starts.
+      The list of excluded candidates can be given as an array of strings or as
+      a delimiter-first string.
+      The order in which candidates are listed does not matter.
+    </p><p>
+      The "protected" item identifies candidates which are protected from
+      defeat and as a result are guaranteed of being a elected.
+      The list of candidates can be given as an array of strings or as a
+      delimiter-first string.
+      The order in which candidates are listed does not matter.
+    </p><p>
+      A re-tabulation of ballots to fill one or more vacancies can be
+      accomplished by:
+    </p>
+    <ul>
+      <li>Excluding any candidate who is not eligible or is unwilling to
+        serve.</li>
+      <li>Protecting any incumbents who will continue to
+        serve.</li>
+      <li>Setting the "nbrSeatsToFill" equal to the number of vacancies
+        being filled, plus the number of protected candidates.</li>
+    </ul>
+    <p>
+      The correct number of protected winners and the correct number of 
+      unprotected winners in such a re-tabulation is ensured by using separate
+      thresholds for each class of candidates.
+    </p>
+
+    <h4>ballots</h4>
+    <p>
+      The "ballots" item is specified as a JSON array of ballot groups.
+      A ballot group represents one or more ballots with the same candidate 
+      rankings.
+      Use of ballot groups allows ballots to be specified in a summarized and
+      typically more compact format.
+    </p><p>
+      Each ballot group is specified as a JSON array of two items: the number
+      of ballots in the group and the candidate rankings for those ballots.
+      The candidate rankings can be given as an array of strings or as a
+      delimiter-first string.
+      The candidate rankings list the first-choice candidate first, the
+      second-choice candidate second, etc.
+      All of the ballots represented by a ballot group have the same candidate
+      rankings.
+    </p><p>
+      The empty string, "", represents a ranking level without a ranked
+      candidate.
+      Such unused rankings can be omitted, since their presence does not change
+      how votes are counted.
+      Use a ranking code of "#" to represent an overvoted ranking, i.e. a
+      ranking level at which more than one candidate was ranked.
+    </p><p>
+      Note that the last two-item array representing the last ballot group
+      is not followed by a comma.
+      Instead it is followed by the right square bracket
+      that closes the list of ballot groups.
+    </p><p>
+      If the ballots and ballot rankings are available in some other format
+      and there are very many of them, it may be worthwhile to format the data
+      using another tool, for example using a spreadsheet.
+    </p>
+
+    <h4>options</h4>
+    <p>
+      The "options" item identifies various alternative ways to perform the
+      tabulation.
+      If an options sub-item is not specified, a default value, the
+      value first listed below, takes effect.
+      Using the defaults by specifying an empty options value, { }, is usually
+      a good way to run a tabulation, unless there are specific reasons to use
+      other values.
+    </p><p>
+      The recognized options sub-items and their allowed values are:
+    </p>
+    <ul>
+      <li><p>
+          "alternative_defeats" specifies whether more than one candidate is
+          allowed to be defeated in a round, subject to various conditions that
+          generally are designed to ensure that multiple defeats will not
+          change who is elected.
+          Valid values are:
+        </p>
+        <ul>
+          <li>"N", which disallows checking for alternative defeats in all
+            rounds.</li>
+          <li>"Y", which allows checking for alternative defeats in any
+            round.</li>
+          <li>an array or a delimiter-first string of "Y" and "N" values in any
+            combination, one for each round of the tabulation.</li>
+        </ul>
+      </li>
+      <li><p>
+          "type_of_altdefs" specifies when during a round any checking for
+          alternative defeats is performed, if it has been allowed by the
+          "alternative_defeats" option.  Valid values are:
+        </p>
+        <ul>
+          <li>"per_reference_rule", which will follow the optional provisions
+            for "Multiple simultaneous defeats" in the reference rule.
+            That will check for alternative defeats every iteration, provided
+            that no candidates have been elected in the round and the round
+            will require at least one more iteration.
+            This can mean that there is no checking for alternative defeats in
+            a round which finishes in just one iteration, for example in a
+            first round that does not elect anyone.</li>
+          <li>"if_no_new_electeds", which will check for alternative defeats in
+            every iteration, provided that no candidates have been elected in
+            the round, but regardless of whether the round requires another
+            iteration.
+            Specifying "if_no_new_electeds" produces the combined effects of
+            both "per_reference_rule" and "before_single_defeats".</li>
+          <li>"before_single_defeats", which will check for alternative defeats
+            only at the end of a round in which no candidates have been
+            elected, and just before a regular single defeat would be
+            required.</li>
+        </ul></li>
+      <li><p>
+          "always_count_votes" specifies whether votes should always be
+          counted in a first round, even if the winners can be determined
+          without any rounds of tabulation, i.e. when the number on
+          non-excluded candidates is equal to or less than the number of seats
+          to fill.
+          Valid values are:
+        </p>
+        <ul>
+          <li>true, which requires that votes to be tabulated for at least the
+            first round.</li>
+          <li>false, which follows the reference rule and avoids all rounds of
+            tabulations if the number of non-excluded candidates is equal to or
+            less than the number of seats to fill.</li>
+        </ul>
+      </li>
+    </ul>
+    <p>
+      For example, specifying an empty options value, { }, is equivalent to
+      specifying the options item with all of its default values:
+    </p>
+    <pre>
+  ,"options": {
+    "alternative_defeats": "N",
+    "type_of_altdefs": "per_reference_rule",
+    "always_count_votes": true
+  }
+    </pre>
+
+    <h4>JSON format errors</h4>
+    <p>
+      If the input data is not in a valid JSON format, for example maybe it
+      has a missing comma or an extra comma somewhere, trying to perform a
+      tabulation will result in a JSON parse syntax error being reported.
+      The error message will indicate the row and column where an error was
+      detected.
+      To find the corresponding place in the input data, it may be helpful to
+      copy and paste the input data into a text editor that reports the row and
+      column of the cursor.
+      The place where the input data needs to be corrected may be at an earlier
+      point in the input data, but the spot indicated by the error message is a
+      good place to start looking for problems.
+    </p>
+    
+    <h4>Browser-based tabulations</h4>
+    <p>
+      This web page does not send any of your election data to the web server
+      or anywhere else on the network.
+      The web server is only used to provide the files needed to display the
+      web page.
+      The vote tabulations are performed entirely within your browser on your
+      computer.
+    </p>
+    
+    <p>
+      One important consequence is that this web page does not save any of
+      your data.
+      If you need to save your input data or the tabulation results,
+      you should do that by copying and pasting the data to another program,
+      for example a text editor or a spreadsheet, and then using that program
+      to save your data.
+    </p>
+
+
+    <h4>Results</h4>
+    <p>
+      A successful tabulation shows the results in a JSON format in three
+      parts.
+      Both the Status and Tally parts are displayed as JSON fragments.
+      They are also displayed in a format that allows each part to be copied and
+      pasted into a spreadsheet for further use.
+    </p><p>
+      For example, for the Tally results, copying the data into a spreadsheet
+      and then using a text-to-columns command can split the data into a
+      tabular format showing vote totals by round.  Use of a text-to-columns
+      command should recognize as separators:
+      spaces, commas, and all of the characters in '[:"]' (not
+      including the enclosing single quotes).
+      It should also merge delimiters. If the spreadsheet program, such as
+      LibreCalc, offers an option to recognize special numbers, that option
+      should be activated. 
+    </p><p>
+      In Microsoft Excel, it may be necessary to first use "Find & Select" /
+      "Replace" to first remove the square brackets and the double quote
+      characters in the Tally data before using the text-to-columns command.
+    </p><p>
+      Each line of the status data shows in order:
+    </p>
+    <ul>
+      <li>The candidate's name / ranking code.</li>
+      <li>Whether the candidate was elected or defeated.</li>
+      <li>The round in which the candidate was elected or defeated.</li>
+      <li>The number of votes the candidate had when elected or defeated.</li>
+      <li>The candidate's keep value at the end of the last round.</li>
+      <li>If the candidate was protected or excluded, a string indicating
+        that.</li>
+    </ul>
+    <p>
+      A candidate's keep value for the last round is a value between zero and
+      one which indicates what portion of votes were kept and counted for that
+      candidate in the last round.
+      For candidates elected before the last round, it will typically be
+      a value less than one but more than zero.
+      For example if a candidate is reported to have 300.0 votes in the last
+      round and a last-round keep value of 0.75, that tells us that in the last
+      round the candidate received about 400.0 votes, but about 100.0 of those
+      votes were transferred as surplus from the candidate.
+    </p><p>
+      In both the Status and Tally parts, candidates are listed in an order
+      that reflects the progress of round-by-round tabulation results:
+    </p>
+    <ul>
+      <li>Elected candidates are listed before defeated candidates.</li>
+      <li>Elected candidates are listed in the order they were elected.</li>
+      <li>Defeated candidates are listed in the reverse order that they were
+        defeated.</li>
+    </ul>
+    <p>
+      Among the benefits of using that ordering is that the candidates
+      still competing to be the last candidate(s) elected in the last round are
+      listed close to each other.
+    </p>
+
+    <br/>
+  </div>
+  <button id='close-input-help-button'>Close</button>
+
+  </div>  
+
+</main>
+<script src='src/index.js' type='module'></script>
+<!-- 
+<script src='lib/basic.js' type='module'></script>
+<script src='lib/ballot.js' type='module'></script>
+<script src='lib/BigInteger.js' type='module'></script>
+<script src='lib/big-integer.js' type='module'></script>
+<script src='lib/constants.js' type='module'></script>
+<script src='lib/decimal9.js' type='module'></script>
+<script src='lib/errors.js' type='module'></script>
+<script src='lib/meek.js' type='module'></script>
+<script src='lib/status.js' type='module'></script>
+<script src='lib/validate.js' type='module'></script>
+-->
+</body>
+</html>

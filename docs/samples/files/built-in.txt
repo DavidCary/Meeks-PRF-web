@@ -1,0 +1,21 @@
+{
+  "nbrSeatsToFill": 3
+  ,"maxRankingLevels": 6
+  ,"options": { }
+  ,"excluded": ""
+  ,"protected": ""
+  ,"tieBreaker": " F A E B D C"
+  ,"candidates": " A B C D E F"
+  ,"names": {
+  }
+  ,"randomSeed": "xyz"
+  ,"ballots": [
+    [7,  " A B C D E F"],
+    [19, " B A C F E D"],
+    [14, " C A B E F D"],
+    [2,  " D"],
+    [11, " D E F A B C"],
+    [30, " E F D C A B"],
+    [17, " F D E B A C"]
+  ]
+}

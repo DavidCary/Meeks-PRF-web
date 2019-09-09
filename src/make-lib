@@ -1,0 +1,43 @@
+#!/bin/bash
+# This bash script uses bash commands to copy files
+# from the meeks-prf-js package into this source directory.
+#
+# In other environments, similar commands
+# can be substituted or performed manually.
+#
+# The meeks-prf-js package src directory:
+fromDir='../node_modules/meeks-prf-js/src'
+
+# delete any existing files that will be replaced
+rm -f big-integer.js
+rm -f ballot.js
+rm -f constants.js
+rm -f decimal9.js
+rm -f errors.js
+rm -f meek.js
+rm -f progress.js
+rm -f results.js
+rm -f status.js
+rm -f util_basic.js
+rm -f validate.js
+
+# copy big-integer and have it import from a
+#   modified copy in this directory
+sed -e "s/import BigInt from 'big-integer';/import BigInt from '.\/BigInteger.js'/;" \
+       	< $fromDir/big-integer.js > ./big-integer.js
+
+# copy other needed files unchanged
+# note that index.js and with_json.js are not copied
+cp $fromDir/ballot.js .
+cp $fromDir/constants.js .
+cp $fromDir/decimal9.js .
+cp $fromDir/errors.js .
+cp $fromDir/meek.js .
+cp $fromDir/progress.js .
+cp $fromDir/results.js .
+cp $fromDir/status.js .
+cp $fromDir/util_basic.js .
+cp $fromDir/validate.js .
+
+# as a convenience, record when this was last run
+echo last built: $(date '+%Y%m%d_%H%M%S.%N' | cut -b 1-22) > LAST_BUILT

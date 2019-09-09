@@ -1,0 +1,150 @@
+<!DOCTYPE html >
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Sample files for Meek's method tabulation</title>
+<link rel="stylesheet" type="text/css" href="../css/base-line-0.css"/>
+<link rel="stylesheet" type="text/css" href="../css/base-line-1.css"/>
+<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+</head>
+<body>
+<div class="page">
+<main>
+<h1>Sample files for Meek's method tabulation</h1>
+<nav id='menu-bar'>
+  <div id='menu-home'><a href='../index.html'>Home</a></div>
+  <div id='menu-tabulate'><a href='../count-votes'>Tabulate</a></div>
+  <div id='menu-readme'><a href='../readme'>README</a></div>
+  <div id='menu-samples'><a href='../samples'>Samples</a></div>
+  <div id='menu-vacancy'><a href='../vacancy'>Vacancy</a></div>
+</nav>
+<p>
+  Here are three sample files
+  that you can display in your web browser
+  and then copy-paste their contents
+  into the tabulation web page's input area.
+  For each input file, there is also a link
+  to the expected tabulation results,
+  shown with full precision to nine decimal places.
+  You can also download these files to your computer
+  and import them into the tabulation web page
+  by clicking / tapping on the "Read File" button.
+</p>
+<ul>
+  <li>
+    The <a href='files/built-in.txt'>built-in sample election contest</a>
+    and its <a href='results/built-in.html'>expected results</a>.
+    This sample file has what is displayed initially in the input area
+    and is what can be restored
+    by clicking / tapping on the "Show Sample Input" button.
+    It elects 3 out of 6 candidates in 5 rounds
+    from 100 ballots in 7 ballot groups.
+  </li>
+  <li>
+    An election contest with
+    <a href='files/r10-500.txt'>
+      10 candidates and 500 ballots electing 5 winners</a>
+    and its <a href='results/r10-500.html'>expected results</a>.
+    Each ballot is listed individually.
+  </li>
+  <li>
+    An election contest with
+    <a href='files/s30-5000.txt'>
+      30 candidates and 5000 ballots electing 15 winners</a>
+    and its <a href='results/s30-5000.html'>expected results</a>.
+    Each ballot is listed individually.
+    This contest is large enough that when run in the background,
+    the tabulation takes enough time that the progress bar is
+    observable as more than just a quick, sub-second flash.
+  </li>
+</ul>
+<p>There is also a
+  <a href='files/eb-demo-vote_by_vote.csv'>
+    vote_by_vote.csv file for a demo ElectionBuddy contest</a>
+  with these
+  <a href='https://secure.electionbuddy.com/results/EBA963R965Y4'
+        rel='noopener noreferer'>
+    results as published by ElectionBuddy</a>.
+  That contest has 20 listed candidates, 3 write-in candidates,
+  and 350 ballots to elect 10 winners.
+</p><p>
+  To independently tabulate results for that election,
+  first download the above vote_by_vote ballot file to your computer.
+  Then from this project's
+  <a href='../count-votes'>tabulation web page</a>:
+</p>
+<ul>
+  <li>Click / tap on the "Show Sample Input" button to
+    have a known starting point.</li>
+  <li>Change the random seed value to "xyz5" from "xyz".</li>
+  <li>Change the "nbrSeatsToFill" value to 10 from 3.</li>
+  <li>Change the "maxRankingLevels" value to 20 from 6.</li>
+  <li>Click / tap on the "Read File" button
+    and select the downloaded file.</li>
+  <li>Click / tap the "OK" button to accept the suggested candidate IDs.</li>
+</ul>
+<p>
+  The data in the input area should now have
+  <a href='results/eb-demo-converted-input.txt'>this converted data</a>.
+  Click / tap on the "Count Votes" button to produce these
+  <a href='results/eb-demo-base-results.html'>results at full precision</a>.
+  Those results rounded to two decimal places
+  also match the published Election Buddy results.
+</p><p>
+  The ballots reflect an electorate that is mostly divided into two factions.
+  The names of the candidates have been conveniently chosen
+  to alphabetically correlate with those two factions.
+  The first faction comprises 40% of the voters.
+  Those voters mostly prefer the eight candidates with names beginning with A-H,
+  so Amari Atkins to Helen Hurst, over any of the other candidates.
+</p><p>
+  The second faction comprises the other 60% of voters.
+  Those voters mostly prefer any of the other candidates over
+  the eight candidates preferred by the first faction.
+  The candidates preferred by the second faction
+  have names that begin with I-T,
+  so Ivan Ishutin to Talia Turner,
+  plus the three write-in candidates whose names begin with W.
+</p><p>
+  When electing 10 candidates, we see that the results do provide
+  proportional representation:
+  the winners included 4 candidates preferred by the first faction
+  and 6 candidates preferred by the second faction.
+</p><p>
+  It should be noted that Briana Brock,
+  a candidate preferred by the first faction,
+  was the last candidate to be defeated,
+  the apparent runner up.
+  It is a common misunderstanding to assign more 
+  significance to that status than it deserves.
+</p><p>
+  To use this demo contest to perform a vacancy re-tabulation,
+  let's suppose that Otto Osborn has resigned.
+  To set the parameters for the re-tabulation,
+  copy the list of elected candidate IDs from the elected results
+  to the value for "protected" candidates.
+  Then remove Otto's candidate ID from that list and add it to 
+  the value for "excluded" candidates,
+  as a delimiter-first string using a space as the delimiter.
+  The excluded and protected parameters should now look like this:
+</p>
+<ul class='no-marker ws-pre'>
+  <li>    ,"excluded": " OttOsb"</li>
+  <li>    ,"protected": ["AmaAtk", "CarCas", "FraFly", "GunGar", "KaiKer", "MarMen", "NalNol", "OttOsb", "QueQua", "TalTur"]</li>
+</ul>
+<p>
+  Now click / tap on the "Count Votes" button, which will
+  produce these
+  <a href='results/eb-demo-otto-vacancy-1.html'>vacancy re-tabulation results</a>.
+</p><p>
+  Note that the results Status table shows which candidates were protected or excluded.
+  Note also that Laura Logan was elected to fill the vacancy, not Briana Brock.
+  In this case, electing Briana would have
+  not respected the preferences of the faction that lost representation,
+  and would have been a result that
+  is inconsistent with the principles of fair, proportional representation.
+</p>
+</main>
+</div>
+</body>
+</html>

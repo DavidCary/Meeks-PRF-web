@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<title>Count Votes with Meek's Method RCV / STV</title>
+<link rel='stylesheet' type='text/css' href='./basic.css'>
+</head>
+<body>
+<h1>Count Votes with Meek's Method RCV / STV</h1>
+<p>Per 
+  <a href="https://prfound.org/resources/reference/reference-meek-rule/"
+        target='_blank' rel='noopener noreferrer'>
+    the reference rule
+  </a>
+  by the Proportional Representation Foundation, with extensions.
+</p>
+<main>
+<div id='noscript-message'>
+ <noscript>Warning: Javascript must be enabled in your browser.</noscript>
+</div>
+<h2>Input:</h2>
+<section id='input-group'>
+  <div id='input-text'>
+    <textarea id='input-textarea' rows='22' cols='95'></textArea>
+  </div>
+</section>
+<section id='actions'>
+  <div id='action-buttons'>
+    <button id='tabulate-button'>Count Votes</button>
+    <button id='read-file-button'>Read File</button>
+    <button id='sample-input-button'>Show Sample Input</button>
+    <button id='input-help-button'>Help</button>
+  </div>
+  <div id='action-options'>
+    <div id='tabulate-in-background-option'>
+      <input type='checkbox' id='tabulate-in-background-input'>
+      <label for='tabulate-in-background-input'
+            id='tabulate-in-background-label'>Tabulate in background</label>
+    </div>
+    <div id='file-to-read' class='hidden'>
+      <input type='file' id='file-to-read-input'>
+    </div>
+  </div>
+</section>
+<h2>Results:</h2>
+<section id='results-group'>
+  <div id='result-message-box' class='result-text-box'>
+    <div id='result-message-holder' class='mono error'>
+      <div id='result-progress'></div>
+      <div id='result-message' class='result-text ws-pre'
+            >Web page initialization failed.</div>
+    </div>
+  </div>
+  <label for='elected'>Elected:</label>
+  <div id='elected' class='result-text result-text-box ws-pre'>|A|B|C</div>
+  <label for='statuses-table'>Status table:</label>
+  <div id='statuses-table-div' 
+        class='result-text result-text-box auto-scroll'>tbd</div>
+  <div id='tally-table-parms'>
+    <select id='votes-nbr-decimal-places'>
+      <option value='0'>0</option>
+      <option value='1'>1</option>
+      <option value='2' selected>2</option>
+      <option value='3'>3</option>
+      <option value='4'>4</option>
+      <option value='5'>5</option>
+      <option value='6'>6</option>
+      <option value='7'>7</option>
+      <option value='8'>8</option>
+      <option value='9'>9</option>
+    </select>
+    <label for='votes-nbr-decimal-places'>Number of decimal places</label>
+  </div>
+  <label for='tally-table'>Tally table:</label>
+  <div id='tally-table-div' 
+        class='result-text result-text-box auto-scroll'>tbd</div>
+  <label for='json'>JSON:</label>
+  <div id='json' class='result-text result-text-box ws-pre auto-scroll mono'
+        >x</div>
+</section>
+<section id='candidate-ids-panel' class='hidden'>
+  <h3>Confirm candidate IDs</h3>
+  <div id='candId-message-box'>
+    <div id='candId-message'>--</div>
+  </div>
+  <div id='candidate-ids-window'>
+    <p>
+      Please confirm the following suggested candidate IDs for each candidate.
+    </p><p>
+      After making any desired adjustments, click / tap the 'OK' button to
+      accept the listed candidate IDs. Click / tap the 'Cancel' button to 
+      cancel the "Read File" operation.
+    </p>
+    <div id='candId-table-area'>
+      <table id='candId-table' class='simple-border'>
+        <thead>
+          <tr>
+            <th class='candId-seq'>#</th>
+            <th class='candId-code'>Candidate<br/>ID</th>
+            <th class='candId-name'>Name</th>
+          </tr>
+        </thead>
+        <tbody id='candId-table-body'>
+          <tr id='candId-row-1'>
+            <td id='candId-seq-row-1' class='candId-seq'>1</td>
+            <td id='candId-code-row-1' class='candId-code'>
+              <input type='text' id='candId-code-input-row-1'
+                    value='JohSmi'>
+            </td>
+            <td id='candId-name-row-1' class='candId-name'>John Smith</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <br/>
+  </div>
+  <div id='candId-actions'>
+    <button id='candId-ok-button'>OK</button>
+    <button id='candId-cancel-button'>Cancel</button>
+    <button id='candId-help-button'>Help</button>
+  </div>
+</section>  
+
+<section id='ask-to-generate-panel' class='hidden'>
+  <h3>Generate ballots despite candidate ID errors?</h3>
+  <div id='ask-message-box'>
+    <div id='ask-message'>--</div>
+  </div>
+  <div id='ask-to-generate-window'>
+    <p>
+      One or more candidate IDs have errors or other anomalies that are likely
+      to cause later difficulties.
+    </p>
+    <div id='ask-error-stats'></div>
+    <p>
+      Do you want to:
+    </p>
+    <ul>
+      <li><strong>Generate ballots</strong> and other data
+        and deal with any issues later, or</li>
+      <li><strong>Change candidate IDs</strong> first.</li>
+    </ul>
+    <p>
+      Candidate IDs with problems are marked
+      with a strong red border.
+    </p>
+  <div id='ask-actions'>
+    <button id='ask-generate-button'>Generate Ballots</button>
+    <button id='ask-change-button'>Change Candidate IDs</button>
+  </div>
+</section>  
+
+<section id='input-help' class='hidden'>
+  <h3>Help Topics</h3>
+  <div id='input-help-text'>
+    <p>
+      Fill in the data for your election following the patterns of the sample
+      input. The input uses the 
+      <a href="https://en.wikipedia.org/wiki/JSON#Data_types_and_syntax">
+        JSON format
+      </a>.
+      Then click on / tap the "Tabulate" button to get results.
+    </p>
+
+    <h4 id='help-Topics'>Topics</h4>
+    <ul class='help-topics'>
+      <li><a href='#help-topic-candidate-ids'>Candidate IDs</a></li>
+      <li><a href='#help-topic-shortcut'>Shortcut for
+          a list of candidate IDs</a></li>
+      <li><a href='#help-topic-nbrSeats'>nbrSeatsToFill</a></li>
+      <li><a href='#help-topic-maxRankingLevels'>maxRankingLevels</a></li>
+      <li><a href='#help-topic-candidates'>candidates</a></li>
+      <li><a href='#help-topic-names'>names</a></li>
+      <li><a href='#help-topic-tieBreaker'>tieBreaker</a></li>
+      <li><a href='#help-topic-excludedAndProtected'>excluded and protected
+          candidates</a></li>
+      <li><a href='#help-topic-ballots'>ballots</a></li>
+      <li><a href='#help-topic-options'>options</a></li>
+      <li><a href='#help-topic-seed'>randomSeed</a></li>
+      <li><a href='#help-topic-jsonErrors'>JSON format errors</a></li>
+      <li><a href='#help-topic-inBrowser'>Browser-based tabulations</a></li>
+      <li><a href='#help-topic-results'>Results</a></li>
+      <li><a href='#help-topic-read'>Read File</a></li>
+    </ul>
+
+    <div class='topic-header'>
+      <a id='help-topic-candidate-ids' class='back-link'
+            href='#help-Topics'>Back to help topics</a>
+      <h4>Candidate IDs</h4>
+    </div>
+    <p>
+      Candidate IDs identify candidates and are typically shortened or
+      abbreviated candidate names.
+      Candidate IDs make it easier to specify
+      how candidates are ranked on ballots.
+    </p><p>
+      A candidate ID is not allowed to begin with ":" or be equal to "#" or "".
+    </p><p>
+      The candidate IDs should not include spaces, other white-space
+      characters, or any of the following characters:
+        ' [ : " ] ' (not including the enclosing single quotes).
+      It is recommended that any punctuation in candidate IDs be limited to
+      hyphens, underscores, and periods and that the first character be an
+      alphabetic letter.
+      It can be helpful if the the candidate IDs are all the same length.
+    </p><p>
+      For example, a candidate named Thomas Jefferson might be given a
+      candidate ID of "TJ", "TJ1", "TJeff", "ThJe", "ThomJ", or "ThomJeff".
+    </p>
+
+    <div class='topic-header'>
+      <a id='help-topic-shortcut' class='back-link'
+            href='#help-Topics'>Back to help topics</a>
+      <h4>Shortcut for an array of strings</h4>
+    </div>
+    <p>
+      A shortcut for specifying a list of candidate IDs uses a delimiter-first
+      string.
+      The candidate IDs are all put in a single string, separated by a
+      delimiter character which is also added as the first character
+
+      The following delimiter-first strings are equivalent to each other
+      and will be converted to an array of strings:
+    </p>
+    <ul class='mono pre'>
+      <li>" Jill Juan  Jane Jack"</li>
+      <li>",Jill,Juan,,Jane,Jack"</li>
+      <li>"|Jill|Juan||Jane|Jack"</li>
+      <li>"+Jill+Juan++Jane+Jack"</li>
+    </ul>
+    <p>
+      The equivalent standard JSON array of strings is:
+    </p>
+    <ul>
+      <li>["Jill", "Juan", "", "Jane", "Jack"]</li>
+    </ul>
+    <p>
+      However an array of strings can involve typing and reading a lot of
+      punctuation.
+      It is usually simpler and easier to use the delimiter-first strings
+      instead.
+    </p><p>
+      The delimiter can be any character, but using the space character or a
+      punctuation character is recommended.
+    </p><p>
+      Using this shortcut, the empty string, "", indicates an empty array of
+      strings, [ ].
+      Similarly, a one-character delimiter-first string, such as ":",
+      indicates the array with just one empty string, [""].
+    </p><p>
+      This shortcut can be used to specify a list of candidate IDs for the
+      "candidates", "tieBreaker", "excluded", and "protected" items, and
+      for the rankings of a ballot.
+      It can also be used for specifying round-by-round values for the
+      "alternative_defeats" options sub-item.
+      For example, use:
+    </p>
+    <ul class='no-markers mono pre'>
+      <li>" Y N N Y N" instead of</li>
+      <li>["Y", "N", "N", "Y", "N"]</li>
+    </ul>
+
+    <div class='topic-header'>
+      <a id='help-topic-nbrSeats' class='back-link'
+            href='#help-Topics'>Back to help topics</a>
+      <h4>nbrSeatsToFill</h4>
+    </div>
+    <p>
+      The "nbrSeatsToFill" item indicates the number of winners
+      that will be elected by the tabulation.
+    </p><p>
+      Fewer candidates might be elected
+      if there are not enough available candidates,
+      i.e. candidates that are not excluded.
+    </p>
+
+    <div class='topic-header'>
+      <a id='help-topic-maxRankingLevels'
+        class='back-link' href='#help-Topics'>Back to help topics</a>
+      <h4>maxRankingLevels</h4>
+    </div>
+    <p>
+      The "maxRankingLevels" item indicates how many candidates a voter is
+      allowed to rank.
+      The number specified must be at least 3. A null value, the letters "null"
+      without the quote marks, can be specified to indicate that there was no
+      limit on how many candidates a voter could rank.
+    </p><p>
+      This item is used to determine whether exhausted votes are reported as
+      abstentions.
+      If a ballot is exhausted and the voter had the opportunity to rank
+      additional candidates, but didn't, any portion of that ballot's vote
+      which is not counting for a candidate is reported in the ":Abstentions"
+      category.
+    </p>
+
+    <div class='topic-header'>
+      <a id='help-topic-candidates' class='back-link'
+            href='#help-Topics'>Back to help topics</a>
+      <h4>candidates</h4>
+    </div>
+    <p>
+      The "candidates" item lists the candidate IDs for each candidate.
+      The list can be given as an array of strings or as a delimiter-first
+      string.
+      The order in which candidate IDs are listed is not important.
+    </p>
+
+    <div class='topic-header'>
+      <a id='help-topic-names' class='back-link'
+            href='#help-Topics'>Back to help topics</a>
+      <h4>names</h4>
+    </div>
+    <p>
+      The "names" item provides full candidate names, keyed by candidate ID.
+      The item value should be a JSON object.
+      For example, a names item for two candidates could be specified as:
+    </p>
+    <div class='mono ws-pre'>
+  ,"names": {
+    "TJ": "Thomas Jefferson",
+    "SA": "Samuel Adams"
+  }
+    </div>
+    <p>where "TJ" and "SA" were declared as candidate IDs
+      in the candidates item.
+    </p>
+
+    <div class='topic-header'>
+      <a id='help-topic-tieBreaker' class='back-link'
+            href='#help-Topics'>Back to help topics</a>
+      <h4>tieBreaker</h4>
+    </div>
+    <p>
+      The "tieBreaker" item is a list of candidates used to break ties for
+      being defeated.
+      Candidates are typically listed in a random order.
+      The list of candidates can be given as an array of strings or as a
+      delimiter-first string.
+    </p><p>
+      Among tied candidates, the candidate listed first in "tieBreaker" will be
+      defeated.
+      It is a tabulation error if a candidate is involved in a tie to be
+      defeated but is not listed in the tieBreaker.
+    </p>
+
+    <div class='topic-header'>
+      <a id='help-topic-excludedAndProtected' class='back-link'
+            href='#help-Topics'>Back to help topics</a>
+      <h4>excluded and protected candidates</h4>
+    </div>
+    <p>
+      The "excluded" item lists the candidate IDs
+      of any candidates which are excluded (a.k.a.  withdrawn)
+      from the tabulation.
+      Excluded candidates are considered defeated
+      before the first round of tabulation starts.
+      The list of excluded candidate IDs can be given
+      as an array of strings or as a delimiter-first string.
+      The order in which candidates are listed does not matter.
+    </p><p>
+      The "protected" item lists the candidate IDs
+      of any candidates which are protected from defeat.
+      Protected candidates as a result are guaranteed of being elected.
+      The list of protected candidates can be given
+      as an array of strings or as a delimiter-first string.
+      The order in which candidate IDs are listed does not matter.
+    </p><p>
+      A re-tabulation of ballots to fill one or more vacancies can be
+      accomplished by:
+    </p>
+    <ul>
+      <li>Excluding any candidate who is not eligible or is unwilling to
+        serve.</li>
+      <li>Protecting any incumbents who will continue to
+        serve.</li>
+      <li>Setting the "nbrSeatsToFill" equal to the number of vacancies
+        being filled, plus the number of protected candidates.</li>
+    </ul>
+    <p>
+      The correct number of protected winners and the correct number of 
+      unprotected winners in such a re-tabulation is ensured by using separate
+      thresholds for each class of candidates.
+    </p>
+
+    <div class='topic-header'>
+      <a id='help-topic-ballots' class='back-link'
+               href='#help-Topics'>Back to help topics</a>
+      <h4>ballots</h4>
+    </div>
+    <p>
+      The "ballots" item is specified as a JSON array of ballot groups.
+      A ballot group represents one or more ballots with the same candidate 
+      rankings.
+      Use of ballot groups allows ballots to be specified in a summarized and
+      typically more compact format.
+    </p><p>
+      Each ballot group is specified as a JSON array of two items: the number
+      of ballots in the group and the candidate rankings for those ballots.
+      The candidate rankings can be given as an array of strings or as a
+      delimiter-first string.
+      The candidate rankings list the first-choice candidate first, the
+      second-choice candidate second, etc.
+    </p><p>
+      The following are equivalent ways of specifying a ballot group that
+      represents 7 ballots with the same rankings:
+    </p>
+    <ul class='no-markers mono pre'>
+      <li>[7, ["A", "B", "C", "D"]],</li>
+      <li>[7, " A B C D"],</li>
+      <li>[7, "|A|B|C|D"],</li>
+    </ul>
+    
+    <p>
+      If the ballot group represents just a single ballot, only the ballot
+      rankings have to be provided.  The following are equivalent ways of
+      specifying a ballot group that represents one ballot:
+    </p>
+    <ul class='no-markers mono pre'>
+      <li>[1, ["A", "B", "C", "D"]],</li>
+      <li>[1, " A B C D"],</li>
+      <li>[1, "-A-B-C-D"],</li>
+      <li>["A", "B", "C", "D"],</li>
+      <li>" A B C D",</li>
+      <li>"-A-B-C-D",</li>
+    </ul>
+    <p>
+      Besides the candidate IDs, there are two additional values
+      that can be used to specify the a ranking
+      in the rankings for a ballot group:
+    </p>
+    <ul>
+      <li>
+        The empty string, "", represents a ranking level
+        without a ranked candidate. 
+        Such unused rankings can be omitted, since their presence does not change
+        how votes are counted.
+        In a delimiter-first string, the empty string
+        is represented by two consecutive delimiter characters and
+        by a delimiter character that is the last character of the string.
+      </li>
+      <li>
+        The value "#", a single pound sign character
+        (a.k.a. hash sign, number sign, and octothorpe character)
+        represents an overvoted ranking.
+        An overvoted ranking occurs when
+        more than one candidate was ranked at the same ranking level.
+      </li>
+    </ul>
+    </p><p>
+      Note that the last ballot group in a list of ballot groups
+      is not followed by a comma.
+      Instead it is followed by the right square bracket
+      that closes the list of ballot groups.
+    </p><p>
+      If the ballots and ballot rankings are available in some other format
+      and there are very many of them, it may be worthwhile to format the data
+      using another tool, for example using a spreadsheet.
+    </p>
+
+    <div class='topic-header'>
+      <a id='help-topic-options' class='back-link'
+               href='#help-Topics'>Back to help topics</a>
+      <h4>options</h4>
+    </div>
+    <p>
+      The "options" item identifies various alternative ways to perform the
+      tabulation.
+      If an options sub-item is not specified, a default value, the
+      value first listed below, takes effect.
+      Using the defaults by specifying an empty options value, { }, is usually
+      a good way to run a tabulation, unless there are specific reasons to use
+      other values.
+    </p><p>
+      The recognized options sub-items and their allowed values are:
+    </p>
+    <ul>
+      <li><p>
+          <strong>"alternative_defeats"</strong> specifies whether more than
+          one candidate is allowed to be defeated in a round, subject to
+          various conditions that generally are designed to ensure that
+          multiple defeats will not change who is elected.
+        </p><p>
+          Alternative defeats are called multiple simulateous defeats
+          in the reference rule.
+          They are also known as batch defeats
+          and defeats with deferred surplus distribution.
+        </p><p>
+          Valid values are:
+        </p>
+        <ul>
+          <li><strong>"N"</strong>, which disallows checking for alternative
+            defeats in all rounds.</li>
+          <li><strong>"Y"</strong>, which allows checking for alternative
+            defeats in any round.</li>
+          <li><strong>an array or a delimiter-first string</strong> of "Y" and
+            "N" values in any combination, one for each round of the
+            tabulation.</li>
+        </ul>
+      </li>
+      <li><p>
+          <strong>"type_of_altdefs"</strong> specifies when during a round any
+          checking for alternative defeats is performed, if it has been allowed
+          by the "alternative_defeats" option.
+          Valid values are:
+        </p>
+        <ul>
+          <li><strong>"per_reference_rule"</strong>, which will follow the
+            optional provisions for "Multiple simultaneous defeats" in the
+            reference rule.
+            That will check for alternative defeats every iteration, provided
+            that no candidates have been elected in the round and the round
+            will require at least one more iteration.
+            This can mean that there is no checking for alternative defeats in
+            a round which finishes in just one iteration, for example in a
+            first round that does not elect anyone.</li>
+          <li><strong>"before_single_defeats"</strong>, which will check for
+            alternative defeats only at the end of a round in which no
+            candidates have been elected, and just before a regular single
+            defeat would be required.</li>
+          <li><strong>"if_no_new_electeds"</strong>, which will check for
+            alternative defeats in every iteration, provided that no candidates
+            have been elected in the round, but regardless of whether the round
+            requires another iteration.
+            Specifying "if_no_new_electeds" produces the combined effects of
+            both "per_reference_rule" and "before_single_defeats".</li>
+        </ul></li>
+      <li><p>
+          <strong>"always_count_votes"</strong> specifies whether votes should
+          always be counted in a first round,
+          even if the winners can be determined without any rounds of
+          tabulation,
+          i.e. when the number on non-excluded candidates is equal to or less
+          than the number of seats to fill.
+          Valid values are:
+        </p>
+        <ul>
+          <li><strong>true</strong>, which requires that votes to be tabulated
+            for at least the first round.</li>
+          <li><strong>false</strong>, which follows the reference rule and
+            avoids all rounds of tabulations if the number of non-excluded
+            candidates is equal to or less than the number of seats to
+            fill.</li>
+        </ul>
+      </li>
+      <li><p>
+          <strong>"ballots_tree"</strong> specifies whether to use some
+          optimizations in how ballots are internally represented during a
+          tabulation.
+          Using these optimizations can help tabulations run faster.
+        </p><p>
+          All three options are designed to produce the exact same tabulation
+          results.
+          Vote totals for each iteration and each round do not change.
+          Valid values are:
+        </p>
+        <ul>
+          <li><strong>"dynamic"</strong> is the fastest option typically.
+            It maintains a tree with rankings maximally summarized
+            and with only the rankings that could be used in a round.
+            The tree is adjusted between rounds.</li>
+          <li><strong>"static"</strong> is typically a close second in speed to
+            the dynamic option.
+            It builds the full tree before starting any tabulation rounds and
+            does not adjust the tree between rounds.</li>
+          <li><strong>"none"</strong> is the slowest, but simplest
+            option.
+            It counts votes for each ballot group separately.</li>
+        </ul>
+      </li>
+    </ul>
+    <p>
+      For example, specifying an empty options value, { }, is equivalent to
+      specifying the options item with all of its default values:
+    </p>
+    <pre>
+  ,"options": {
+    "alternative_defeats": "N",
+    "type_of_altdefs": "per_reference_rule",
+    "always_count_votes": true,
+    "ballots_tree": "dynamic"
+  }
+    </pre>
+
+    <div class='topic-header'>
+      <a id='help-topic-seed'
+        class='back-link' href='#help-Topics'>Back to help topics</a>
+      <h4>randomSeed</h4>
+    </div>
+    <p>
+      The "randomSeed" item provides a way to create a randomized
+      tieBreaker when reading and converting from a file that is in an
+      Election Buddy ballot format.
+      The value can be any string or number.
+      The default value is the string "undefined".
+    </p><p>
+      The conversion process generates a tieBreaker value using SHA-256 hashes
+      of the randomSeed value and the names of candidates.
+      If those values do not change, repeated conversions will produce the same
+      tieBreaker.
+      The relative order of listed candidates in the generated tieBreaker does
+      not depend on the presence or naming of any write-in candidates.
+    </p><p>
+      Once a tieBreaker has been generated with a randomized randomSeed value,
+      it is recommended that all subsequent tabulations use that tieBreaker
+      value.
+    </p>
+
+    <div class='topic-header'>
+      <a id='help-topic-jsonErrors' class='back-link'
+            href='#help-Topics'>Back to help topics</a>
+      <h4>JSON format errors</h4>
+    </div>
+    <p>
+      If the input data is not in a valid JSON format, for example maybe it
+      has a missing comma or an extra comma somewhere, trying to perform a
+      tabulation will result in a JSON parse syntax error being reported.
+      The error message will indicate the row and column where an error was
+      detected.
+      To find the corresponding place in the input data, it may be helpful to
+      copy and paste the input data into a text editor that reports the row and
+      column of the cursor.
+      The place where the input data needs to be corrected may be at an earlier
+      point in the input data, but the spot indicated by the error message is a
+      good place to start looking for problems.
+    </p>
+    
+    <div class='topic-header'>
+      <a id='help-topic-inBrowser' class='back-link'
+            href='#help-Topics'>Back to help topics</a>
+      <h4>Browser-based tabulations</h4>
+    </div>
+    <p>
+      This web page does not send any of your election data to the web server
+      or anywhere else on the network.
+      The web server is only used to provide the files needed to display the
+      web page.
+      The vote tabulations are performed entirely within your browser on your
+      computer.
+    </p>
+    
+    <p>
+      One important consequence is that this web page does not save any of
+      your data.
+      If you need to save your input data or the tabulation results,
+      you should do that by copying and pasting the data to another program,
+      for example a text editor or a spreadsheet, and then using that program
+      to save your data.
+    </p>
+    <p>
+      This web page provides an option
+      to perform tabulations in the background.
+      Background tabulations are still done completely within
+      your browser.
+      However when longer running tabulations are done in the background,
+      you will see progress messages,
+      and you also are able to cancel the tabulation
+      without leaving the web page.
+    </p>
+    <p>
+      This web page was designed for you to be able
+      to save the web page to an HTML file on your computer
+      and then later access the saved HTML file to perform tabulations.
+      Due to limitations imposed by modern browsers,
+      when a saved HTML file is accessed directly by the browser,
+      you will not be able to tabulate in the background.
+    </p>
+
+    <div class='topic-header'>
+      <a id='help-topic-results' class='back-link'
+            href='#help-Topics'>Back to help topics</a>
+      <h4>Results</h4>
+    </div>
+    <p>
+      A successful tabulation shows the results in three levels of detail:
+    </p>
+    <ul>
+      <li>Who was elected, both as a JSON array of candidate IDs
+        and as a plain text list of candidate names
+        (or candidate ID in lieu of name).</li>
+      <li>The status of every candidate in a tabular format:
+        <ul>
+          <li>The candidate's name (or ID in lieu of a name).</li>
+          <li>The candidate's ID.</li>
+          <li>Whether the candidate was elected or defeated.</li>
+          <li>The round in which the candidate was elected or defeated.</li>
+          <li>The number of votes the candidate had
+            when elected or defeated.</li>
+          <li>The candidate's keep value at the end of the last round.</li>
+          <li>If the candidate was protected or excluded, a string indicating
+            that.</li>
+        </ul>
+        Rows for elected candidates are highlighted with light green.
+      </li>
+      <li>A round-by-round tally of votes for each candidate
+        and other statistics in a tabular format with the following features:
+        <ul>
+          <li>The vote total for the round
+            when a candidate was elected is highlighted in green.
+            Subsequent vote totals for the elected candidate
+            are highlighted in a lighter green.
+          </li>
+          <li>The vote total for the round
+            when a candidate was defeated is highlighted in red.
+            For subsequent rounds, the defeated candand
+            does not have vote totals.
+          </li>
+          <li>Rows of candidates in groups of four
+            are otherwise highlighted in alternating shades of light blue.
+            This highlighting only intended
+            to help you visually follow a row across a wide table
+            and does not indicate any substantive differences
+            among the candidates.
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <p>All of this data is also shown in a JSON format.
+    </p><p>
+      Both the tabular data and the JSON data can be copied and pasted
+      into a spreadsheet for other report formatting, analysis, or
+      graphical presentations.
+    </p>
+      After pasting the JSON data into a spreadsheet,
+      you may need to use a text-to-columns command
+      to split the data into a tabular format.
+      Use of a text-to-columns
+      command should recognize as separators:
+      spaces, commas, and all of the characters in ' [ : " ] ' (not
+      including the enclosing single quotes).
+      It should also merge delimiters. If the spreadsheet program, such as
+      LibreCalc, offers an option to recognize special numbers, that option
+      should be activated. 
+    </p><p>
+      In Microsoft Excel, it may be necessary to first use "Find & Select" /
+      "Replace" to first remove the square brackets and the double quote
+      characters in the Tally data before using the text-to-columns command.
+    <p>
+      A candidate's keep value for the last round is a value between zero and
+      one which indicates what portion of votes received by the candidate
+      were kept and counted for the candidate,
+      rather than being passed on as surplus to less preferred candidates.
+      For candidates elected before the last round,
+      the keep value will typically be
+      a value less than one but more than zero.
+      For example if a candidate is reported to have 300.0 votes in the last
+      round and a last-round keep value of 0.75, that tells us that in the last
+      round the candidate received about 400 votes, but about 100 of those
+      votes were transferred as surplus from the candidate.
+    </p><p>
+      For both the status and tally portions of the results,
+      candidates are listed in an order
+      that reflects the progress of round-by-round tabulation results:
+    </p>
+    <ul>
+      <li>Elected candidates are listed before defeated candidates.</li>
+      <li>Elected candidates are listed in the order they were elected.</li>
+      <li>Defeated candidates are listed in the reverse order that they were
+        defeated.</li>
+    </ul>
+    <p>
+      Among the benefits of using that ordering
+      is that the tabular formats show the progression
+      of electing candidates at the top
+      and defeating candidates at the bottom.
+      Also, the candidates who are still competing
+      to be elected or defeated in the last round
+      are listed close to each other in the middle.
+    </p>
+
+    <div class='topic-header'>
+      <a id='help-topic-read' class='back-link'
+            href='#help-Topics'>Back to help topics</a>
+      <h4>Read File</h4>
+    </div>
+    <p>
+      Clicking / tapping on the "Read File" button will allow you to select
+      a file on your computer that is used to populate the input area.
+    </p><p>
+      The file can be a text file with JSON data or it can be a file using the
+      format for Election Buddy ballot files (a vote_by_vote.csv file).
+    </p><p>
+      If the file is not recognized as an Election Buddy ballot file,
+      the current text in the input area will be completely replaced by the
+      file contents.
+      This allows you to easily start with data that you earlier saved
+      or with data that is separately created and maintained.
+    </p><p>
+      To save data from the input area, copy and paste it to a plain text
+      editor and save the data from there.
+      This web page is not able to write data to files.
+      Note that the input area will likely have a simple undo capability for
+      changes made by typing,
+      but it may not be able to undo the effects of reading a file.
+      So first save any data that you might want to reuse.
+    </p><p>
+      If the file is recognized as being formatted as an Election Buddy
+      ballot file,
+      the current text in the input area must be valid JSON or must first be
+      manually deleted.
+      Clicking on the "Show Sample Input" is a quick way to fill the input area
+      with valid JSON data.
+    </p><p>
+      The results of the conversion will replace any values for the candidates, 
+      tieBreaker, ballots, excluded, protected, and names items.
+      All other values will be kept,
+      but might be rearranged in a different order or with
+      different formatting.
+    </p><p>
+      The tieBreaker that is generated by the conversion depends in part on
+      the randomSeed item.
+      The randomSeed value should be set to a randomized value.
+    </p><p>
+      Candidate names will be stored in the input area as a "names" item.
+      These names are not used by the tabulation,
+      but are available to be copy-and-pasted to other results reporting
+      capabilities.
+    </p><p>
+      As part of the data conversion, suggested candidate IDs are
+      generated for all of the candidates.
+      Those candidate IDs are subject to your review before the new data
+      is created and put in the input area.
+      It is possible that some of the suggested candidate IDs might not be
+      unique and would need to be adjusted during your review. During the
+      review, any candidate IDs that are in error or are otherwise problematic
+      are flagged with a red border.
+    </p><p>
+      Candidate IDs can also be manually entered in the fourth line of the
+      EB-format ballot file.
+      For listed candidates, put the candidate ID in the candidate's
+      tab-separated column.
+      For write-in candidates, put the candidate ID in subsequent columns in
+      the order in which write-in candidates are encountered in the
+      file's ballot lines.
+    </p><p>
+      The Election Buddy ballot files can be read by most spreadsheet programs
+      as a CSV (comma-separated-value) file,
+      but with settings to recognize only the the tab character as a value
+      separator and not using any quoting character.
+      A single-quote (') or double-quote (") character can be used
+      as the quoting character if no value (particularly a candidate name)
+      begins with that character.
+      If any changes to the file are saved from the spreadsheet program,
+      similar settings for tab separators and not quoting values should be
+      used.
+    </p>
+
+    <br/>
+  </div>
+  <button id='close-input-help-button'>Close</button>
+</section>  
+
+<footer>
+  <div id='version'></div>
+  <div id='license'>Distributed under
+    <a href='https://www.apache.org/licenses/LICENSE-2.0'>
+      Apache License Version 2.0
+    </a>
+  </div>
+</footer>
+
+</main>
+<script src='main.js'></script>
+
+</body>
+</html>

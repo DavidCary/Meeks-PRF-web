@@ -1,0 +1,188 @@
+<!DOCTYPE html >
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Vacancy re-tabulations with Meek's method</title>
+<link rel="stylesheet" type="text/css" href="../css/base-line-0.css"/>
+<link rel="stylesheet" type="text/css" href="../css/base-line-1.css"/>
+<link rel="stylesheet" type="text/css" href="../css/common.css"/>
+</head>
+<body>
+<div class="page">
+<main>
+<h1>Vacancy re-tabulations with Meek's method</h1>
+<nav id='menu-bar'>
+  <div id='menu-home'><a href='../index.html'>Home</a></div>
+  <div id='menu-tabulate'><a href='../count-votes'>Tabulate</a></div>
+  <div id='menu-readme'><a href='../readme'>README</a></div>
+  <div id='menu-samples'><a href='../samples'>Samples</a></div>
+  <div id='menu-vacancy'><a href='../vacancy'>Vacancy</a></div>
+</nav>
+</p><p>
+  When there are one or more vacancies in an elected office,
+  re-tabulating voter's preferences
+  from a previous RCV / STV election
+  can be an effective way to decide
+  which of the unelected candidates in that election
+  will fill the vacancies.
+  This allows voters to still decide who best represents them,
+  but without the expense or delay of holding a special election.
+</p><p>
+  The vacancy re-tabulation procedures implemented in this project
+  are an extension of the PRF reference rule.
+  The extended procedures still follow
+  the principles and general methods of Meek's method
+  while honoring the goal of proportional representation
+  within the constraints of filling a vacancy.
+</p><p>
+  Vacancy re-tabulations are performed by following three simple rules:
+</p>
+<ul>
+  <li>
+    Designate as protected candidates
+    any incumbents who will continue to serve.
+  </li>
+  <li>
+    Designate as excluded candidates
+    any candidates who are ineligible to serve or
+    who are unwilling to serve.
+  </li>
+  <li>
+    Set the number of winners
+    (a.k.a. the number of seats to fill)
+    equal to the sum of the number of protected candidates
+    and the number of vacancies to be filled by the re-tabulation.
+  </li>
+</ul>
+<p>
+  An excluded candidate is treated
+  as if the candidate were already defeated
+  before the tabulation begins.
+  In contrast, a protected candidate is protected from being defeated
+  and as a result is ensured of being elected.
+</p><p>
+  The vacancy re-tabulation ensures that
+  all of the protected candidates
+  and the correct number of unprotected candidates are elected.
+  This is accomplished in part by using different quotas
+  for protected candidates versus unprotected candidates.
+</p><hr/><p>
+  For those who are interested,
+  the remainder of this page provides more background and explanation
+  about the details of how a vacancy re-tabulation is calculated.
+  You do not have to be familiar with this material
+  in order to effectively use the tabulation web page
+  to perform a vacancy re-tabulation.
+</p><p>
+  During a vacancy re-tabulation, there are two groups of candidates
+  competing for votes.
+  One consists of the protected candidates,
+  the other consists of all of the other candidates
+  who are not protected and not excluded.
+  The second group are the candidates who are 
+  competing to be chosen to fill the one or more vacancies,
+  so we'll call them the vacancy candidates.
+</p><p>
+  Candidates from both groups are awarded votes in the same way
+  as in a regular Meek's method tabulation.
+  However to ensure that the correct number of candidates
+  are elected from each group,
+  each group has its own quota (a.k.a threshold)
+  for being elected and for distributing surplus votes.
+</p><p>
+  The quota for the protected candidates is calculated
+  in the same way as for a regular election.
+  The calculation of the quota for the vacancy candidates
+  follows the same principles,
+  but applied according to the special circumstances
+  of the vacancy candidates.
+  The vacancy quota will always be at least as big
+  as the quota for protected candidates.
+  Typically the gap will narrow as the tabulation progresses.
+</p><p>
+  Here are two PDF files that document
+  how the PRF reference rule is extended
+  to support vacancy re-tabulations.
+</p>
+<ul>
+  <li>The first PDF shows
+    <a href='../resources/prfound-meek-ref-rule-vacancy-ext.pdf'>
+    the reference rule with the extensions</a>.
+  </li>
+  <li>The second PDF shows
+    <a href='../resources/prfound-meek-ref-rule-vacancy-compare.pdf'>
+    a comparison of the reference rule to the extended rule</a>,
+    which makes it easier to see what has changed.
+  </li>
+</ul>
+</p><p>
+  Ignoring for the moment the relatively minor issues
+  of rounding and the precision of arithmetic calculations,
+  the quota for vacancy candidates is still calculated 
+  by the traditional formula:
+</p>
+<ul class='no-marker'>
+  <li>Q = V / (1 + S)</li>
+</ul>
+<p>
+  However V is the total number of votes that could still
+  count for vacancy candidates, and S is the number of
+  vacancy candidates that are allowed to be elected.
+  Since protected candidates are never defeated,
+  only their surplus votes
+  can potentially count for vacancy candidates.
+  So any votes for a protected candidate
+  that are below the protected candidate quota
+  are not counted as part of V
+  for the vacancy candidate quota.
+</p><p>
+  One might wonder why the above interpretation
+  is not also applied to the protected candidates.
+  If it were, that would mean that the V for protected
+  candidates would be all votes counting for any candidate
+  and S would be the number of protected candidates that 
+  can be elected.
+</p><p>
+  The problem with that approach is that the votes
+  counting for vacancy candidates would be double counted
+  in the numerators of the respective quotas,
+  while the denominators are strictly partitioned between
+  the the two groups.
+</p><p>
+  The way to avoid that problem is to rethink how the
+  candidates are grouped.
+  Instead of partitioning the candidates into two separate groups,
+  the candidates are put into two overlapping groups.
+  The first group is the group of all non-excluded candidates,
+  both protected candidates and vacancy candidates.
+  The second group is just the vacancy candidates.
+</p><p>
+  Now the generalized formula for a group of candidates
+  can be applied to both groups.
+  When a candidate is in more than one group,
+  the rule is that the highest quota of any such group
+  applies to that candidate.
+  In other words, in order to be elected,
+  a candidate has to satisfy all of the quotas
+  for the groups the candidate is a member of.
+</p><p>
+  So while there is still some double counting of votes
+  between the two groups,
+  as applied to the numerators of the quotas,
+  there is now a commensurate double counting of
+  electable positions in the denominators of the quotas.
+</p><p>
+  This provides a uniform basis for the approach that is
+  reflected in the extended rule for vacancy re-tabulations.
+</p><p>
+  In practice, it means that
+  protected candidates only have to satisfy the regularly calculated
+  quota that applies to everyone,
+  while vacancy candidates also have to satisfy
+  the typically higher vacancy quota
+  that only applies to vacancy candidates.
+</p>
+</main>
+</div>
+</body>
+</html>

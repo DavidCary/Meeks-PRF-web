@@ -1,0 +1,11 @@
+/* Additional baseline beyond resets and normalization */
+h1 {font-size: 1.331em; margin: 0.6667em 0; text-align: center;}
+h2 {font-size: 1.21em; margin: 0.605em 0;}
+h3 {font-size: 1.1em; margin: 0.55em 0;}
+h4 {font-size: 1.0em; margin: 0.5em 0;}
+h5 {font-size: 0.9em; margin: 0.45em 0;}
+h1, h2, h3, h4, h5, h6 { font-weight: bold;}
+body {background-color: #bde; line-height: 1.15em}
+p {margin: 0.65em 0;}
+ul {list-style: disc outside; margin-left: 0em; padding-left: 2em;}
+ul li {padding-left: 2em; text-indent: -2em;}

@@ -1,0 +1,68 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta charset="utf-8">
+<title>Results for built-in sample file</title>
+<link rel="stylesheet" type="text/css" href="../../count-votes/basic.css">
+</head>
+<body>
+<h1>Results for built-in sample file</h1>
+<main>
+<h2>Results:</h2>
+<section id="results-group">
+  <div id="result-message-box" class="result-text-box">
+    <div id="result-message-holder" class="ok">
+      <div id="result-progress" style="height: 0px; width: 0px;"></div>
+      <div id="result-message" class="result-text ws-pre">Tabulation complete.</div>
+    </div>
+  </div>
+  <label for="elected">Elected:</label>
+  <div id="elected" class="result-text result-text-box ws-pre">["B", "E", "F"]<br>B<br>E<br>F</div>
+  <label for="statuses-table">Status table:</label>
+  <div id="statuses-table-div" class="result-text result-text-box auto-scroll"><table id="statuses-table" class="simple-border"><thead><tr id="statuses-thead-row"><th id="statuses-thead-name" class="statuses-name">Candidate<br>Name</th><th id="statuses-thead-candId" class="statuses-candId">ID</th><th id="statuses-thead-status" class="statuses-status">Status</th><th id="statuses-thead-round" class="statuses-round">Round</th><th id="statuses-thead-votes" class="statuses-votes">Votes</th><th id="statuses-thead-keep" class="statuses-keep">Keep<br>Factor</th></tr></thead><tbody><tr class="statuses-row-elected"><td class="statuses-name">E</td><td class="statuses-candId">E</td><td class="statuses-status">elected</td><td class="statuses-round">1</td><td class="statuses-votes">30.000000000</td><td class="statuses-keep">0.597560976</td></tr><tr class="statuses-row-elected"><td class="statuses-name">B</td><td class="statuses-candId">B</td><td class="statuses-status">elected</td><td class="statuses-round">3</td><td class="statuses-votes">26.000000000</td><td class="statuses-keep">0.942307693</td></tr><tr class="statuses-row-elected"><td class="statuses-name">F</td><td class="statuses-candId">F</td><td class="statuses-status">elected</td><td class="statuses-round">5</td><td class="statuses-votes">33.499999984</td><td class="statuses-keep">1.000000000</td></tr><tr class="statuses-row-defeated"><td class="statuses-name">C</td><td class="statuses-candId">C</td><td class="statuses-status">defeated</td><td class="statuses-round">5</td><td class="statuses-votes">15.499999982</td><td class="statuses-keep">1.000000000</td></tr><tr class="statuses-row-defeated"><td class="statuses-name">D</td><td class="statuses-candId">D</td><td class="statuses-status">defeated</td><td class="statuses-round">4</td><td class="statuses-votes">13.000000000</td><td class="statuses-keep">0.000000000</td></tr><tr class="statuses-row-defeated"><td class="statuses-name">A</td><td class="statuses-candId">A</td><td class="statuses-status">defeated</td><td class="statuses-round">2</td><td class="statuses-votes">7.000000000</td><td class="statuses-keep">0.000000000</td></tr></tbody></table></div>
+  <div id="tally-table-parms">
+    <select id="votes-nbr-decimal-places">
+      <option value="9">9</option>
+    </select>
+    <label for="votes-nbr-decimal-places">Number of decimal places</label>
+  </div>
+  <label for="tally-table">Tally table:</label>
+  <div id="tally-table-div" class="result-text result-text-box auto-scroll"><table id="tally-table" class="simple-border"><thead><tr id="tally-thead-row"><th id="tally-thead-name" class="tally-name">Candidate<br>Name</th><th id="tally-thead-round-1" class="tally-round">Round<br>1</th><th id="tally-thead-round-2" class="tally-round">Round<br>2</th><th id="tally-thead-round-3" class="tally-round">Round<br>3</th><th id="tally-thead-round-4" class="tally-round">Round<br>4</th><th id="tally-thead-round-5" class="tally-round">Round<br>5</th></tr></thead><tbody><tr class="tally-row-candidate tally-row-even"><td class="tally-name tally-name-elected">E</td><td class="tally-votes tally-now-elected">30.000000000</td><td class="tally-votes tally-was-elected">25.000000020</td><td class="tally-votes tally-was-elected">25.000000020</td><td class="tally-votes tally-was-elected">25.000000020</td><td class="tally-votes tally-was-elected">24.500000016</td></tr><tr class="tally-row-candidate tally-row-even"><td class="tally-name tally-name-elected">B</td><td class="tally-votes">19.000000000</td><td class="tally-votes">19.000000000</td><td class="tally-votes tally-now-elected">26.000000000</td><td class="tally-votes tally-was-elected">25.000000012</td><td class="tally-votes tally-was-elected">24.500000018</td></tr><tr class="tally-row-candidate tally-row-even"><td class="tally-name tally-name-elected">F</td><td class="tally-votes">17.000000000</td><td class="tally-votes">21.999999980</td><td class="tally-votes">21.999999980</td><td class="tally-votes">21.999999980</td><td class="tally-votes tally-now-elected">33.499999984</td></tr><tr class="tally-row-candidate tally-row-even"><td class="tally-name tally-name-defeated">C</td><td class="tally-votes">14.000000000</td><td class="tally-votes">14.000000000</td><td class="tally-votes">14.000000000</td><td class="tally-votes">14.999999988</td><td class="tally-votes tally-now-defeated">15.499999982</td></tr><tr class="tally-row-candidate tally-row-odd"><td class="tally-name tally-name-defeated">D</td><td class="tally-votes">13.000000000</td><td class="tally-votes">13.000000000</td><td class="tally-votes">13.000000000</td><td class="tally-votes tally-now-defeated">13.000000000</td></tr><tr class="tally-row-candidate tally-row-odd"><td class="tally-name tally-name-defeated">A</td><td class="tally-votes">7.000000000</td><td class="tally-votes tally-now-defeated">7.000000000</td></tr><tr class="tally-row-other tally-row-first-other"><td class="tally-name">:Votes for candidates</td><td class="tally-votes">100.000000000</td><td class="tally-votes">100.000000000</td><td class="tally-votes">100.000000000</td><td class="tally-votes">100.000000000</td><td class="tally-votes">98.000000000</td></tr><tr class="tally-row-other"><td class="tally-name">:Overvotes</td><td class="tally-votes">0.000000000</td><td class="tally-votes">0.000000000</td><td class="tally-votes">0.000000000</td><td class="tally-votes">0.000000000</td><td class="tally-votes">0.000000000</td></tr><tr class="tally-row-other"><td class="tally-name">:Abstentions</td><td class="tally-votes">0.000000000</td><td class="tally-votes">0.000000000</td><td class="tally-votes">0.000000000</td><td class="tally-votes">0.000000000</td><td class="tally-votes">2.000000000</td></tr><tr class="tally-row-other"><td class="tally-name">:Other exhausted</td><td class="tally-votes">0.000000000</td><td class="tally-votes">0.000000000</td><td class="tally-votes">0.000000000</td><td class="tally-votes">0.000000000</td><td class="tally-votes">0.000000000</td></tr><tr class="tally-row-other"><td class="tally-name">:Total votes</td><td class="tally-votes">100.000000000</td><td class="tally-votes">100.000000000</td><td class="tally-votes">100.000000000</td><td class="tally-votes">100.000000000</td><td class="tally-votes">100.000000000</td></tr><tr class="tally-row-other"><td class="tally-name">:Quota</td><td class="tally-votes">25.000000001</td><td class="tally-votes">25.000000001</td><td class="tally-votes">25.000000001</td><td class="tally-votes">25.000000001</td><td class="tally-votes">24.500000001</td></tr><tr class="tally-row-other"><td class="tally-name">:Total surplus</td><td class="tally-votes">4.999999999</td><td class="tally-votes">0.000000019</td><td class="tally-votes">1.000000018</td><td class="tally-votes">0.000000030</td><td class="tally-votes">9.000000015</td></tr><tr class="tally-row-iterations tally-row-other"><td class="tally-name">:Iterations</td><td class="tally-integer">1</td><td class="tally-integer">2</td><td class="tally-integer">1</td><td class="tally-integer">2</td><td class="tally-integer">2</td></tr></tbody></table></div>
+  <label for="json">JSON:</label>
+  <div id="json" class="result-text result-text-box ws-pre auto-scroll mono">{<br>  "elected": ["B", "E", "F"]<br>  ,"status": [<br>    ["E", "elected", 1, 30.0, 0.597560976],<br>    ["B", "elected", 3, 26.0, 0.942307693],<br>    ["F", "elected", 5, 33.499999984, 1.0],<br>    ["C", "defeated", 5, 15.499999982, 1.0],<br>    ["D", "defeated", 4, 13.0, 0.0],<br>    ["A", "defeated", 2, 7.0, 0.0]<br>  ]<br>  ,"tally": {<br>    "E": [30.0, 25.00000002, 25.00000002, 25.00000002, 24.500000016],<br>    "B": [19.0, 19.0, 26.0, 25.000000012, 24.500000018],<br>    "F": [17.0, 21.99999998, 21.99999998, 21.99999998, 33.499999984],<br>    "C": [14.0, 14.0, 14.0, 14.999999988, 15.499999982],<br>    "D": [13.0, 13.0, 13.0, 13.0],<br>    "A": [7.0, 7.0],<br>    ":Votes for candidates": [100.0, 100.0, 100.0, 100.0, 98.0],<br>    ":Overvotes": [0.0, 0.0, 0.0, 0.0, 0.0],<br>    ":Abstentions": [0.0, 0.0, 0.0, 0.0, 2.0],<br>    ":Other exhausted": [0.0, 0.0, 0.0, 0.0, 0.0],<br>    ":Total votes": [100.0, 100.0, 100.0, 100.0, 100.0],<br>    ":Quota": [25.000000001, 25.000000001, 25.000000001, 25.000000001, 24.500000001],<br>    ":Total surplus": [4.999999999, 1.9e-8, 1.000000018, 3e-8, 9.000000015],<br>    ":Iterations": [1, 2, 1, 2, 2]<br>  }<br>}</div>
+</section>
+
+<footer>
+  <div id="version">Version 0.9.1</div>
+  <div id="license">Distributed under
+    <a href="https://www.apache.org/licenses/LICENSE-2.0">
+      Apache License Version 2.0
+    </a>
+  </div>
+</footer>
+
+</main>
+<script src="main.js"></script>
+<!--
+  The following script tags are used to facilitate being able to save this
+  this web page from a browser and then use the saved version to do
+  tabulations
+<script> var STOP_TAB_WORKER = true; </script>
+<script id='tab-worker-script' src='./tab-worker.js'></script>
+<script> STOP_TAB_WORKER = false; </script>
+-->
+<!--
+<script src='lib/basic.js' type='module'></script>
+<script src='lib/ballot.js' type='module'></script>
+<script src='lib/BigInteger.js' type='module'></script>
+<script src='lib/big-integer.js' type='module'></script>
+<script src='lib/constants.js' type='module'></script>
+<script src='lib/decimal9.js' type='module'></script>
+<script src='lib/errors.js' type='module'></script>
+<script src='lib/meek.js' type='module'></script>
+<script src='lib/status.js' type='module'></script>
+<script src='lib/validate.js' type='module'></script>
+-->
+
+
+</body></html>
