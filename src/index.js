@@ -25,8 +25,8 @@ import Debug from './debug.js';
 var DBG = Debug.setDBG(0); // level of debug traces; see ./debug.js for usage 
 const PDBG = Debug.PDBG;
 
-const version = [0, 9, 1];
-const versionStr = 'v0.9.1';
+const version = [1, 0, 0];
+const versionStr = 'v1.0.0';
 
 let tabWorker = null;
 let nbrProgressMessages = 0;

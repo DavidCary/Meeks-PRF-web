@@ -3,7 +3,6 @@ const path = require('path');
 module.exports = {
   entry: {
     main: './src/index.js',
-    //'tab-worker': './src/tab-worker.js',
   },
   output: {
     filename: (chunkData) => {
@@ -27,7 +26,7 @@ module.exports = {
         test: /\-worker\.js$/,
         use: {
           loader: 'worker-loader',
-          options: {name: 'v0.9.1.a1-tab-worker.js'},
+          options: {name: 'v1.0.0.a1-tab-worker.js'},
         },
       },
     ],

@@ -50,9 +50,10 @@ is in the tabulation web page's "Help" panel.
 ## Introduction
 
 With the tabulation web page, you can provide information
-about a ranked choice voting (RCV) / single transferable vote (STV)
-election contest, such as candidates, ballots, and other parameters.
-You can then count the votes based on
+describing candidates, ballots, and other parameters
+for a ranked choice voting (RCV) / single transferable vote (STV)
+election contest.
+You can then count the votes using
 the Proportional Representation Foundation's
 [reference rule for Meek's method
 ](https://prfound.org/resources/reference/reference-meek-rule/)
@@ -60,14 +61,15 @@ and various optional extensions to that rule.
 
 The web page can be used as a standalone tool.
 The vote counting is done entirely client-side in your browser.
-Other than initially providing the web page resources (static
-HTML, CSS, and Javascript files) the web page is not dependent on
-any web server and does not communicate across any networks.
+Other than initially providing the web page resources
+(HTML, CSS, and Javascript files) the web page is not dependent on
+any web server and does not communicate across networks
+with other computers.
 
 The web page uses the 
 [Meeks-PRF-js](https://github.com/DavidCary/Meeks-PRF-js) tabulation engine
 which is also available to developers as an NPM package,
-[meeks-prf-js](https:npmjs.com/package/meeks-prf-js).
+[meeks-prf-js](https://www.npmjs.com/package/meeks-prf-js).
 
 Meek's method is a form of RCV / STV that supports proportional
 representation in multi-winner elections.
@@ -95,10 +97,9 @@ result, provided that any ties are consistently resolved.
 
 ## Version
 
-This is version 0.9.1 of the Meeks-PRF-web project. It has stable, well
+This is version 1.0.0 of the Meeks-PRF-web project. It has stable, well
 tested functionality.
-The 0.9.x versions will be used to refine initial
-published packaging.
+Unlike earlier versions, this version is intended for general use.
 
 
 ## Features

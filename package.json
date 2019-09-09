@@ -1,13 +1,13 @@
 {
   "name": "meeks-prf-web",
-  "version": "0.9.1",
+  "version": "1.0.0",
   "description": "Count votes with Meeks Method RCV / STV",
   "private": true,
   "no-main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "build-readme": "target=docs/readme/index.html && cp other/readme-begin.txt $target && showdown makehtml -i README.md >> $target && cat other/readme-end.txt >> $target"
+    "build-readme": "target=docs/readme/index.html && cp other/readme-begin.txt $target && showdown makehtml -i README.md --rawHeaderId >> $target && cat other/readme-end.txt >> $target"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
     "@babel/core": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
     "babel-loader": "^8.0.6",
-    "meeks-prf-js": "^0.9.1",
+    "meeks-prf-js": "^1.0.0",
     "showdown": "^1.9.0",
     "webpack": "^4.39.0",
     "webpack-cli": "^3.3.6",

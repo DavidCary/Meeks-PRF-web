@@ -865,7 +865,7 @@ function () {
    *     after votes are counted for every iteration,
    *     provided that no candidates have been elected in the round.
    *
-   *   __Default value__: `ifNoNewElecteds` ('if_no_new_elected')
+   *   __Default value__: `ifNoNewElecteds` ('if_no_new_electeds')
    *
    * - `ballotTree` ('ballot_tree')
    *
@@ -963,7 +963,7 @@ function () {
       var optionsValidated = validator.options(this._options);
       this._options = {};
       this._options[_constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.alternativeDefeats._value] = _constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.alternativeDefeats.never;
-      this._options[_constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.typeOfAltDefs._value] = _constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.typeOfAltDefs.beforeSingleDefeats;
+      this._options[_constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.typeOfAltDefs._value] = _constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.typeOfAltDefs.ifNoNewElecteds;
       this._options[_constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.alwaysCountVotes._value] = _constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.alwaysCountVotes.yes;
       this._options[_constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.ballotTree._value] = _constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.ballotTree.dynamic;
 
@@ -8168,7 +8168,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /** Major, minor, patch version numbers using semantic versioning */
 
-var _versionNumbers = [0, 9, 1];
+var _versionNumbers = [1, 0, 0];
 /** Major, minor, patch version as a string */
 
 var _versionString = _versionNumbers.join('.');
@@ -8232,8 +8232,8 @@ var _options = new _Option('option', 'options', [new _Option('alternativeDefeats
  * 
  * ~~~
  * K.Decimal = Decimal9; // the Decimal9 class
- * K.VERSION_NUMBERS = [ 0, 9, 1 ];
- * K.VERSION_STRING = '0.9.1';
+ * K.VERSION_NUMBERS = [ 1, 0, 0 ];
+ * K.VERSION_STRING = '1.0.0';
  * K.ZERO = new Decimal9(0);
  * K.ONE = new Decimal9(1);
  * K.ULP = new Decimal9(0.000000001); // =  new Decimal9(1, -9);

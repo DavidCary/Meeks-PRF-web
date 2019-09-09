@@ -505,12 +505,18 @@
           Valid values are:
         </p>
         <ul>
+          <li><strong>"if_no_new_electeds"</strong>, which will check for
+            alternative defeats in every iteration, provided that no candidates
+            have been elected in the round, but regardless of whether the round
+            requires another iteration.
+            Specifying "if_no_new_electeds" produces the combined effects of
+            both "per_reference_rule" and "before_single_defeats".</li>
           <li><strong>"per_reference_rule"</strong>, which will follow the
             optional provisions for "Multiple simultaneous defeats" in the
             reference rule.
             That will check for alternative defeats every iteration, provided
-            that no candidates have been elected in the round and the round
-            will require at least one more iteration.
+            that no candidates have been elected in the round
+            and that the round will require at least one more iteration.
             This can mean that there is no checking for alternative defeats in
             a round which finishes in just one iteration, for example in a
             first round that does not elect anyone.</li>
@@ -518,12 +524,6 @@
             alternative defeats only at the end of a round in which no
             candidates have been elected, and just before a regular single
             defeat would be required.</li>
-          <li><strong>"if_no_new_electeds"</strong>, which will check for
-            alternative defeats in every iteration, provided that no candidates
-            have been elected in the round, but regardless of whether the round
-            requires another iteration.
-            Specifying "if_no_new_electeds" produces the combined effects of
-            both "per_reference_rule" and "before_single_defeats".</li>
         </ul></li>
       <li><p>
           <strong>"always_count_votes"</strong> specifies whether votes should
@@ -576,7 +576,7 @@
     <pre>
   ,"options": {
     "alternative_defeats": "N",
-    "type_of_altdefs": "per_reference_rule",
+    "type_of_altdefs": "if_no_new_electeds",
     "always_count_votes": true,
     "ballots_tree": "dynamic"
   }

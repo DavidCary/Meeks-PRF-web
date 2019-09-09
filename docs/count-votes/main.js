@@ -223,8 +223,8 @@ var tabWorkerFileName = 'tab-worker.js';
 var DBG = _debug_js__WEBPACK_IMPORTED_MODULE_39__["default"].setDBG(0); // level of debug traces; see ./debug.js for usage 
 
 var PDBG = _debug_js__WEBPACK_IMPORTED_MODULE_39__["default"].PDBG;
-var version = [0, 9, 1];
-var versionStr = 'v0.9.1';
+var version = [1, 0, 0];
+var versionStr = 'v1.0.0';
 var tabWorker = null;
 var nbrProgressMessages = 0;
 var tabulatingInBackground = false;
@@ -5512,7 +5512,7 @@ function () {
    *     after votes are counted for every iteration,
    *     provided that no candidates have been elected in the round.
    *
-   *   __Default value__: `ifNoNewElecteds` ('if_no_new_elected')
+   *   __Default value__: `ifNoNewElecteds` ('if_no_new_electeds')
    *
    * - `ballotTree` ('ballot_tree')
    *
@@ -5610,7 +5610,7 @@ function () {
       var optionsValidated = validator.options(this._options);
       this._options = {};
       this._options[_constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.alternativeDefeats._value] = _constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.alternativeDefeats.never;
-      this._options[_constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.typeOfAltDefs._value] = _constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.typeOfAltDefs.beforeSingleDefeats;
+      this._options[_constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.typeOfAltDefs._value] = _constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.typeOfAltDefs.ifNoNewElecteds;
       this._options[_constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.alwaysCountVotes._value] = _constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.alwaysCountVotes.yes;
       this._options[_constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.ballotTree._value] = _constants_js__WEBPACK_IMPORTED_MODULE_22__["default"].OPTIONS.ballotTree.dynamic;
 
@@ -8927,7 +8927,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /** Major, minor, patch version numbers using semantic versioning */
 
-var _versionNumbers = [0, 9, 1];
+var _versionNumbers = [1, 0, 0];
 /** Major, minor, patch version as a string */
 
 var _versionString = _versionNumbers.join('.');
@@ -8991,8 +8991,8 @@ var _options = new _Option('option', 'options', [new _Option('alternativeDefeats
  * 
  * ~~~
  * K.Decimal = Decimal9; // the Decimal9 class
- * K.VERSION_NUMBERS = [ 0, 9, 1 ];
- * K.VERSION_STRING = '0.9.1';
+ * K.VERSION_NUMBERS = [ 1, 0, 0 ];
+ * K.VERSION_STRING = '1.0.0';
  * K.ZERO = new Decimal9(0);
  * K.ONE = new Decimal9(1);
  * K.ULP = new Decimal9(0.000000001); // =  new Decimal9(1, -9);
@@ -15075,7 +15075,7 @@ new b(2147483648,2147516424)];W=[[0,36,3,41,18],[1,44,10,45,2],[62,6,43,15,61],[
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function () {
-  return new Worker(__webpack_require__.p + "v0.9.1.a1-tab-worker.js");
+  return new Worker(__webpack_require__.p + "v1.0.0.a1-tab-worker.js");
 };
 
 /***/ }),
