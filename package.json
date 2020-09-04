@@ -25,7 +25,7 @@
     "@babel/preset-env": "^7.6.0",
     "babel-loader": "^8.0.6",
     "meeks-prf-js": "^1.0.0",
-    "showdown": "^1.9.0",
+    "showdown": "^1.9.1",
     "webpack": "^4.39.0",
     "webpack-cli": "^3.3.6",
     "worker-loader": "^2.0.0"
