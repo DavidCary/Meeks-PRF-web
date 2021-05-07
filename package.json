@@ -33,6 +33,6 @@
   "dependencies": {
     "core-js": "^3.2.1",
     "jssha": "^2.3.1",
-    "ua-parser-js": "^0.7.20"
+    "ua-parser-js": "^0.7.24"
   }
 }
